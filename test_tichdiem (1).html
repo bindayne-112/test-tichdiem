@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Tích điểm</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f0f0f0; text-align: center; }
+    .box { background: white; padding: 2em; border-radius: 10px; display: inline-block; }
+    input { padding: 10px; font-size: 1em; width: 90%; margin: 1em 0; }
+    button { padding: 10px 20px; font-size: 1em; background: orange; color: white; border: none; cursor: pointer; }
+    #result { margin-top: 1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Test gửi dữ liệu tích điểm</h2>
+    <input type="tel" id="phone" placeholder="Nhập số điện thoại"><br>
+    <input type="text" id="code" placeholder="Nhập mã tích điểm"><br>
+    <button onclick="submitTest()">Tích điểm</button>
+    <p id="result"></p>
+  </div>
+
+  <script>
+    function submitTest() {
+      const phone = document.getElementById("phone").value.trim();
+      const code = document.getElementById("code").value.trim();
+
+      if (!phone || !code) {
+        alert("Vui lòng nhập đầy đủ thông tin");
+        return;
+      }
+
+      const url = `https://script.google.com/macros/s/AKfycbzgrAJB266q718FuMZG6Cnu5pMFsh6XbnlGD8VTt1pQ4pIfftGcCdyBkoKlxyAvRPxUzw/exec?ghi=1&phone=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`;
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "OK") {
+            document.getElementById("result").innerText = "✅ Tích điểm thành công!";
+          } else {
+            document.getElementById("result").innerText = "⚠️ " + data.message;
+          }
+        })
+        .catch(() => {
+          document.getElementById("result").innerText = "❌ Lỗi kết nối. Thử lại sau.";
+        });
+    }
+  </script>
+</body>
+</html>
